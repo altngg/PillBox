@@ -1,6 +1,7 @@
 # Environment files
 .venv
 .venv.local
+.env
 
 # OS files
 .DS_Store
