@@ -1,19 +1,16 @@
-
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from database import engine, Base
+from app.api.medicines import router as medicines_router
+from app.api.reminders import router as reminders_router
+from app.database import Base, engine
 
-
+# Создаём таблицы (если не используем alembic)
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="PillBox API")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.include_router(medicines_router)
+app.include_router(reminders_router)
 
-app.include_router(router)
+@app.get("/")
+def root():
+    return {"message": "Welcome to PillBox API"}
