@@ -5,9 +5,9 @@ import { Login } from "./pages/Login";
 import { Pillbox } from "./pages/Pillbox";
 import { Addmed } from "./pages/Addmed";
 import { Register } from "./pages/Register";
+import { Reminder } from "./pages/Reminder";
+import { Profile } from "./pages/Profile";
 import "./App.css";
-// import { Pillbox } from "./pages/Pillbox";
-// import { Medicine } from "./pages/Medicine";
 
 const App: React.FC = () => {
   return (
@@ -18,7 +18,8 @@ const App: React.FC = () => {
         <Route path="/pillbox" element={<Pillbox />} />
         <Route path="/addmed" element={<Addmed />} />
         <Route path="/register" element={<Register />} />
-        
+        <Route path="/reminder" element={<Reminder />} />
+        <Route path="/profile" element={<Profile />} />
         
       </Routes>
     </BrowserRouter>

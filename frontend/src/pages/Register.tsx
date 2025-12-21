@@ -7,6 +7,7 @@ export function Register() {
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.setItem("isAuthenticated", "true");
     // Здесь можно добавить логику регистрации
     console.log('Регистрация выполнена!');
     navigate('/pillbox'); // После регистрации — на главную

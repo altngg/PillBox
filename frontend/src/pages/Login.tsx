@@ -10,7 +10,7 @@ export function Login() {
 
     const handleLogin = (e:React.FormEvent) => {
         e.preventDefault();
-
+        localStorage.setItem("isAuthenticated", "true");
         //console.log('Вход:', { email, password });
 
         navigate('/pillbox');
