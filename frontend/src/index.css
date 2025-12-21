@@ -1,0 +1,49 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 200px;
+}
+
+.home-button {
+    padding: 8px;
+    height: 50%;
+}
+
+a {
+  text-decoration: none;
+}
+
+@font-face {
+    font-family: "Geologica";
+    src: url("assets/Geologica.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+h1 {
+    font-family: "Geologica";
+    color: #399E8A;
+    font-size: 36px;
+    text-align: center;
+    margin: 20px 0 40px;
+}
+
+
+.text-button {
+    font-size: 24px;
+    font-family: "Geologica";
+    color: #399E8A;
+    text-align: center;
+
+}
+
+.line {
+    height: 20px;
+    margin: 0px 10px;
+}
+
+.menu-buttons {
+    padding: 8px;
+}
+

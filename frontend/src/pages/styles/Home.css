@@ -1,0 +1,48 @@
+.home-container {
+    padding: 40px 60px; 
+    max-width: 1200px;   
+    margin: 0 auto;
+}
+
+.about-text-header{
+    text-align: left;
+}
+
+.about-section {
+  display: flex;
+  align-items: center; 
+  gap: 10px;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+/* Контейнер для списка возможностей */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1; 
+  width: 100%;
+  max-width: 640px;
+}
+
+/* Стиль каждой "карточки" */
+.feature-item {
+  font-family: "Geologica";
+  background-color: #CAE9E3; 
+  color: #399E8A;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 30px;
+  text-align: left;
+  width: 80%;
+  height: 100px;
+}
+
+.home-image {
+  width: 600px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
