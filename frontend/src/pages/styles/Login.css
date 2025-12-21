@@ -1,0 +1,68 @@
+.login-container {
+  max-width: 400px;
+  margin: auto; /* отступ сверху/снизу */
+  padding: 30px;
+  background-color: #fff;
+}
+
+.login-title {
+  font-family: "Geologica";
+  color: #399E8A;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-group label {
+  font-family: "Geologica";
+  color: #399E8A;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.input-group input {
+  flex: 1;
+  height: 36px;
+  border: none;
+  border-bottom: 2px solid #399E8A;
+  background: transparent;
+  font-family: "Geologica";
+  font-size: 16px;
+  color: #399E8A;
+  padding: 0 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+  border-bottom-color: #2c7a6e;
+}
+
+.login-button {
+  background-color: #399E8A;
+  color: white;
+  font-family: "Geologica";
+  font-size: 18px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+}
+
+.login-button:hover {
+  background-color: #2c7a6e;
+}

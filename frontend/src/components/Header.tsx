@@ -11,7 +11,7 @@ export function Header(){
             <div className="menu-buttons">
                 <NavLink to="/login" className="text-button">Вход</NavLink>
                 <img className="line" src={Line} alt="разделение" />
-                <NavLink to="/registration" className="text-button">Регистрация</NavLink>
+                <NavLink to="/register" className="text-button">Регистрация</NavLink>
             </div>
             
         </div>

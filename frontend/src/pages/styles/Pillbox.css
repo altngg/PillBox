@@ -1,0 +1,53 @@
+/* src/pages/Pillbox.css */
+
+.pillbox-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.pillbox-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 0; 
+  padding: 10px 0;
+  border-bottom: 4px solid #399E8A;
+}
+
+.stats {
+  font-family: "Geologica";
+  color: #399E8A;
+  font-size: 16px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-box label {
+  font-family: "Geologica";
+  color: #399E8A;
+  font-size: 16px;
+}
+
+.search-box input {
+  width: 200px;
+  height: 30px;
+  border: none;
+  border-bottom: 2px solid #399E8A;
+  background: transparent;
+  font-family: "Geologica";
+  font-size: 16px;
+  color: #399E8A;
+  padding: 0 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-box input:focus {
+  border-bottom-color: #2c7a6e;
+}
