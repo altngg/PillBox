@@ -12,7 +12,7 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-# Для ответа (без пароля!)
+# Для ответа 
 class UserRead(BaseModel):
     id: int
     email: EmailStr

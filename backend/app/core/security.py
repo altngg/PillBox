@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordBearer
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 # Настройки JWT
-SECRET_KEY = "I374vmTIOLsRUETFGt-eZxFrzllUrez2NP40ls0RADU" 
+SECRET_KEY = "your-secret-key-change-in-production" 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
