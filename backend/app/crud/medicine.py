@@ -22,3 +22,13 @@ def delete_medicine(db: Session, medicine_id: int):
         db.delete(medicine)
         db.commit()
     return medicine
+
+def update_medicine(db: Session, medicine_id: int, medicine_update: MedicineCreate):
+    db_medicine = db.query(Medicine).filter(Medicine.id == medicine_id).first()
+    if not db_medicine:
+        return None
+    for key, value in medicine_update.model_dump().items():
+        setattr(db_medicine, key, value)
+    db.commit()
+    db.refresh(db_medicine)
+    return db_medicine

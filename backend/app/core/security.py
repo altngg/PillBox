@@ -5,7 +5,7 @@ from typing import Optional
 from fastapi.security import OAuth2PasswordBearer
 
 # Хэширование паролей
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 # Настройки JWT
 SECRET_KEY = "I374vmTIOLsRUETFGt-eZxFrzllUrez2NP40ls0RADU" 
