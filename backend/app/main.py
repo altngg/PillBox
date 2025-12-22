@@ -5,7 +5,7 @@ from app.api.admin import router as admin_router
 from app.api.auth import router as auth_router
 from app.database import Base, engine
 
-# Создаём таблицы (если не используем alembic)
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="PillBox API")

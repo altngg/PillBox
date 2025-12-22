@@ -10,6 +10,12 @@ class ReminderBase(BaseModel):
 class ReminderCreate(ReminderBase):
     pass
 
+class ReminderUpdate(ReminderCreate):
+    dosage: Optional[str] = None
+    times_per_day: Optional[int] = None
+    course_days: Optional[int] = None
+    medicine_id: Optional[int] = None
+
 class Reminder(ReminderBase):
     id: int
 
