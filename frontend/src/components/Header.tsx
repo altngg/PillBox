@@ -41,6 +41,11 @@ export function Header() {
     setIsMenuOpen(false);
     navigate('/profile');
   };
+  
+  const goToPillbox = () => {
+    setIsMenuOpen(false);
+    navigate('/pillbox');
+  };
 
   const goToReminders = () => {
     setIsMenuOpen(false);
@@ -71,6 +76,9 @@ export function Header() {
               <div className="profile-dropdown-menu">
                 <div onClick={goToProfile} className="dropdown-item">
                   Профиль
+                </div>
+                <div onClick={goToPillbox} className="dropdown-item">
+                  Аптечка
                 </div>
                 <div onClick={goToReminders} className="dropdown-item">
                   Напоминания
