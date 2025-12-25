@@ -13,7 +13,12 @@ app = FastAPI(title="PillBox API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://host.docker.internal:5173",  # Для Docker на Windows/macOS
+        "http://172.17.0.1:5173",            # Для Linux
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
