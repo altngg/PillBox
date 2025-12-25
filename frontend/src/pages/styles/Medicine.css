@@ -1,0 +1,97 @@
+/* src/pages/styles/Medicine.css */
+
+.medicine-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.medicine-title {
+  font-family: "Geologica";
+  color: #399E8A;
+  font-size: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 4px solid #399E8A;
+  text-align: left;
+}
+
+.medicine-info {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-family: "Geologica";
+  font-size: 16px;
+  color: #399E8A;
+}
+
+.label {
+  font-weight: bold;
+  min-width: 150px;
+}
+
+.status-badge {
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.add-reminder-button {
+  background-color: #66CDA8;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Geologica";
+  font-size: 14px;
+}
+
+.add-reminder-button:hover {
+  background-color: #5cbf9d;
+}
+
+.medicine-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.action-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Geologica";
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.action-button.edit {
+  background-color: #399E8A;
+  color: white;
+}
+
+.action-button.edit:hover {
+  background-color: #65BCAA;
+}
+
+.action-button.back {
+  background-color: #CAE9E3;
+  color: #399E8A;
+}
+
+.action-button.back:hover {
+  background-color: #399E8A;
+  color: #CAE9E3;
+}

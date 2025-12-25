@@ -1,3 +1,5 @@
+/* src/pages/Addmed.css */
+
 .add-med-container {
   max-width: 800px;
   margin: auto;
@@ -34,8 +36,9 @@
 
 .form-input,
 .form-input-date,
-.form-textarea {
-  width: 100%;
+.form-textarea,
+.form-select { /* ← новый класс для select */
+  width: 90%;
   padding: 10px 12px;
   border: 2px solid #399E8A;
   border-radius: 8px;
@@ -49,9 +52,24 @@
 
 .form-input:focus,
 .form-input-date:focus,
-.form-textarea:focus {
+.form-textarea:focus,
+.form-select:focus {
   border-color: #2c7a6e;
 }
+
+/* Стили для select */
+.form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.form-select::-ms-expand {
+  display: none;
+}
+
+/* Для стрелочки в select (если нужно) можно добавить псевдоэлемент, но пока оставим как есть */
 
 .form-row {
   display: flex;
@@ -60,7 +78,7 @@
 }
 
 .form-row .form-group {
-  flex: 1 1 200px; /* Гибкая ширина, но не меньше 200px */
+  flex: 1 1 200px;
 }
 
 .form-input-date {
@@ -91,14 +109,9 @@
   background-color: #2c7a6e;
 }
 
-/* Адаптивность */
-@media (max-width: 600px) {
-  .form-row {
-    flex-direction: column;
-    gap: 20px;
-  }
 
-  .form-input-date {
-    max-width: 100%;
-  }
+.form-error {
+  color: #d32f2f;
+  margin-bottom: 16px;
+  font-size: 14px;
 }

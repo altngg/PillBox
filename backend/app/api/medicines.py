@@ -105,8 +105,6 @@ def update_medicine(
 ):
     # Получаем препарат и проверяем владение
     medicine = get_user_medicine(medicine_id, db, current_user)
-    
-    # Обновляем поля
     for field, value in medicine_update.model_dump(exclude_unset=True).items():
         setattr(medicine, field, value)
     
