@@ -1,5 +1,3 @@
-/* src/pages/Pillbox.css */
-
 .pillbox-container {
   max-width: 800px;
   margin: auto;
@@ -68,14 +66,13 @@
   padding: 16px;
   margin-bottom: 16px;
   position: relative;
-  min-height: 60px; /* для центрирования */
+  min-height: 60px; 
 }
 
 .medicine-item:hover {
   background-color: #5cbf9d;
 }
 
-/* Левая часть: название и назначение */
 .medicine-left {
   position: absolute;
   left: 16px;
@@ -104,7 +101,6 @@
   white-space: normal;
 }
 
-/* Центральная часть: срок годности */
 .medicine-expiry {
   position: absolute;
   left: 50%;
@@ -129,7 +125,6 @@
   display: block;
 }
 
-/* Правая часть: кнопка удаления */
 .delete-button {
   position: absolute;
   top: 8px;

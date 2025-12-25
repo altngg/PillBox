@@ -16,7 +16,6 @@
   width: 100%;
 }
 
-/* Контейнер для списка возможностей */
 .feature-list {
   display: flex;
   flex-direction: column;
@@ -26,7 +25,6 @@
   max-width: 640px;
 }
 
-/* Стиль каждой "карточки" */
 .feature-item {
   font-family: "Geologica";
   background-color: #CAE9E3; 

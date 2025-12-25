@@ -1,6 +1,6 @@
 .login-container {
   max-width: 400px;
-  margin: auto; /* отступ сверху/снизу */
+  margin: auto; 
   padding: 30px;
   background-color: #fff;
 }

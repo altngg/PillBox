@@ -14,7 +14,7 @@ from app.crud.medicine import get_medicines, create_medicine, delete_medicine, u
 from app.schemas.medicine import MedicineCreate, Medicine
 
 router = APIRouter(prefix="/medicines", tags=["medicines"])
-# Получение текущего пользователя
+
 def get_current_user(
     token: str = Depends(oauth2_scheme), 
     db: Session = Depends(get_db)
@@ -77,11 +77,9 @@ def read_medicines(
 ):
     query = db.query(MedicineModel).filter(MedicineModel.owner_id == current_user.id)
     
-    # Фильтрация по названию (частичное совпадение, регистронезависимо)
     if name:
         query = query.filter(MedicineModel.name.ilike(f"%{name}%"))
     
-    # Фильтрация по назначению
     if purpose:
         query = query.filter(MedicineModel.purpose.ilike(f"%{purpose}%"))
     
@@ -103,7 +101,6 @@ def update_medicine(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Получаем препарат и проверяем владение
     medicine = get_user_medicine(medicine_id, db, current_user)
     for field, value in medicine_update.model_dump(exclude_unset=True).items():
         setattr(medicine, field, value)

@@ -1,4 +1,3 @@
-// src/services/authService.ts
 import apiClient from '../api/client';
 
 
@@ -18,7 +17,6 @@ export interface AuthResponse {
   token_type: string;
 }
 
-// Регистрация
 export const register = async (userData: UserRegister): Promise<void> => {
   await apiClient.post('/auth/register', userData);
 };
@@ -29,7 +27,6 @@ export const login = async (credentials: UserLogin): Promise<string> => {
   localStorage.setItem('access_token', access_token);
   return access_token;
 };
-
 
 export const logout = (): void => {
   localStorage.removeItem('access_token');

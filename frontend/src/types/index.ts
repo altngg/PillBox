@@ -1,4 +1,3 @@
-// src/types/index.ts
 export interface UserLogin {
   email: string;
   password: string;
@@ -18,7 +17,7 @@ export interface Medicine {
   name: string;
   form: string;
   purpose?: string;
-  manufacture_date?: string; // ISO date
+  manufacture_date?: string; 
   expiry_date?: string;
   status: string;
 }
@@ -46,7 +45,6 @@ export interface ReminderCreate {
   medicine_id: number;
 }
 
-// Для частичного обновления (опционально)
 export interface ReminderUpdate {
   dosage?: string;
   times_per_day?: number;

@@ -1,4 +1,3 @@
-// src/services/medicineService.ts
 import apiClient from '../api/client';
 import type { Medicine, MedicineCreate } from '../types';
 

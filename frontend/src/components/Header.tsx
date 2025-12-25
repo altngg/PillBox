@@ -1,4 +1,3 @@
-// src/components/Header.tsx
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import Icon from "../assets/Icon.png";

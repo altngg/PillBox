@@ -1,4 +1,3 @@
-// src/pages/Medicine.tsx
 import { Header } from "../components/Header";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -30,7 +29,6 @@ export function Medicine() {
     fetchMedicine();
   }, [id, navigate]);
 
-  // Функция для определения цвета статуса
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'expired': return '#d32f2f';

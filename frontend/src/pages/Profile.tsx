@@ -17,20 +17,16 @@ export function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Получаем данные пользователя
         const userData = await getCurrentUser();
         setUser(userData);
 
-        // Получаем препараты
         const medicines = await getMedicines();
         setMedicinesCount(medicines.length);
 
-        // Получаем напоминания
         const reminders = await getReminders();
         setRemindersCount(reminders.length);
       } catch (error) {
         console.error('Ошибка загрузки профиля:', error);
-        // Можно показать ошибку или перенаправить на логин
       } finally {
         setLoading(false);
       }

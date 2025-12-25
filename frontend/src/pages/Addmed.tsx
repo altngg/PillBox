@@ -1,4 +1,3 @@
-// src/pages/Addmed.tsx
 import { Header } from "../components/Header";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -20,7 +19,7 @@ export function Addmed() {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
 
-  // Подгружаем данные при редактировании
+
   useEffect(() => {
     const loadMedicine = async () => {
       if (!editId) return;
@@ -31,7 +30,7 @@ export function Addmed() {
         setForm(med.form);
         setPurpose(med.purpose || '');
         
-        // Преобразуем даты: ГГГГ-ММ-ДД → ДД.ММ.ГГГГ
+        
         const formatDate = (dateStr?: string): string => {
           if (!dateStr) return '';
           const [year, month, day] = dateStr.split('-');
@@ -56,7 +55,6 @@ export function Addmed() {
     setLoading(true);
     setError(null);
 
-    // Преобразуем даты из формата ДД.ММ.ГГГГ → ГГГГ-ММ-ДД
     const parseDate = (dateStr: string): string | undefined => {
       if (!dateStr) return undefined;
       const parts = dateStr.split('.');

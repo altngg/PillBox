@@ -7,11 +7,10 @@ from app.models.reminder import Reminder as ReminderModel
 from app.models.medicine import Medicine
 from app.models.user import User
 from app.schemas.reminder import ReminderCreate, ReminderUpdate, Reminder
-from app.api.medicines import get_current_user  # переиспользуем вашу функцию
+from app.api.medicines import get_current_user 
 
 router = APIRouter(prefix="/reminders", tags=["reminders"])
 
-# Вспомогательная функция: получить напоминание и проверить владение
 def get_user_reminder(
     reminder_id: int,
     db: Session,
@@ -28,14 +27,12 @@ def get_user_reminder(
         )
     return reminder
 
-# === CREATE ===
 @router.post("/", response_model=Reminder)
 def create_reminder(
     reminder: ReminderCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Проверяем, что препарат существует и принадлежит пользователю
     medicine = db.query(Medicine).filter(
         Medicine.id == reminder.medicine_id,
         Medicine.owner_id == current_user.id
@@ -55,7 +52,6 @@ def create_reminder(
     db.refresh(db_reminder)
     return db_reminder
 
-# === READ LIST ===
 @router.get("/", response_model=List[Reminder])
 def read_reminders(
     db: Session = Depends(get_db),
@@ -63,7 +59,6 @@ def read_reminders(
 ):
     return db.query(ReminderModel).filter(ReminderModel.owner_id == current_user.id).all()
 
-# === READ ONE ===
 @router.get("/{reminder_id}", response_model=Reminder)
 def read_reminder(
     reminder_id: int = Path(..., gt=0),
@@ -72,7 +67,6 @@ def read_reminder(
 ):
     return get_user_reminder(reminder_id, db, current_user)
 
-# === UPDATE ===
 @router.put("/{reminder_id}", response_model=Reminder)
 def update_reminder(
     reminder_id: int = Path(..., gt=0),
@@ -81,8 +75,7 @@ def update_reminder(
     current_user: User = Depends(get_current_user)
 ):
     reminder = get_user_reminder(reminder_id, db, current_user)
-    
-    # Проверяем, что новый medicine_id (если указан) принадлежит пользователю
+
     if reminder_update.medicine_id is not None:
         medicine = db.query(Medicine).filter(
             Medicine.id == reminder_update.medicine_id,
@@ -94,7 +87,6 @@ def update_reminder(
                 detail="Новый препарат не найден или не принадлежит вам"
             )
     
-    # Обновляем поля
     for field, value in reminder_update.model_dump(exclude_unset=True).items():
         setattr(reminder, field, value)
     
@@ -102,7 +94,6 @@ def update_reminder(
     db.refresh(reminder)
     return reminder
 
-# === DELETE ===
 @router.delete("/{reminder_id}")
 def delete_reminder(
     reminder_id: int = Path(..., gt=0),

@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-
 from app.database import get_db
 from app.models.user import User as UserModel
 from app.models.medicine import Medicine as MedicineModel
@@ -9,12 +8,11 @@ from app.models.reminder import Reminder as ReminderModel
 from app.schemas.user import UserRead, UserCreate
 from app.schemas.medicine import Medicine, MedicineCreate
 from app.schemas.reminder import Reminder, ReminderCreate
-from app.api.medicines import get_current_user  # переиспользуем существующую функцию
+from app.api.medicines import get_current_user  
 from app.core.security import get_password_hash
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
-# === ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ: только для суперпользователей ===
 def require_superuser(current_user: UserModel = Depends(get_current_user)) -> UserModel:
     if not current_user.is_superuser:
         raise HTTPException(
@@ -23,10 +21,7 @@ def require_superuser(current_user: UserModel = Depends(get_current_user)) -> Us
         )
     return current_user
 
-# ======================
-# ПОЛЬЗОВАТЕЛИ
-# ======================
-
+# получение пользователей
 @router.get("/users", response_model=List[UserRead])
 def get_all_users(
     db: Session = Depends(get_db),
@@ -49,7 +44,7 @@ def create_user(
         username=user.username,
         hashed_password=hashed_pw,
         is_active=True,
-        is_superuser=False  # по умолчанию НЕ админ
+        is_superuser=False 
     )
     db.add(db_user)
     db.commit()
@@ -84,9 +79,7 @@ def make_user_superuser(
     db.commit()
     return {"message": f"Пользователь {user.email} теперь админ"}
 
-# ======================
-# ПРЕПАРАТЫ
-# ======================
+# получение препаратов
 
 @router.get("/medicines", response_model=List[Medicine])
 def get_all_medicines(
@@ -98,7 +91,7 @@ def get_all_medicines(
 @router.post("/medicines", response_model=Medicine)
 def create_medicine_for_any_user(
     medicine: MedicineCreate,
-    owner_id: int,  # ← явно указываем владельца
+    owner_id: int,  
     db: Session = Depends(get_db),
     admin: UserModel = Depends(require_superuser)
 ):
@@ -124,9 +117,7 @@ def delete_any_medicine(
     db.commit()
     return {"message": f"Препарат '{medicine.name}' удалён админом {admin.email}"}
 
-# ======================
-# НАПОМИНАНИЯ
-# ======================
+# получение напоминаний
 
 @router.get("/reminders", response_model=List[Reminder])
 def get_all_reminders(
@@ -141,7 +132,6 @@ def create_reminder_for_any_user(
     db: Session = Depends(get_db),
     admin: UserModel = Depends(require_superuser)
 ):
-    # Проверяем, что medicine существует
     medicine = db.query(MedicineModel).filter(MedicineModel.id == reminder.medicine_id).first()
     if not medicine:
         raise HTTPException(status_code=404, detail="Препарат не найден")

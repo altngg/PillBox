@@ -1,4 +1,3 @@
-// src/pages/Pillbox.tsx
 import { Header } from "../components/Header";
 import { AddButton } from '../components/AddButton';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +6,6 @@ import { getMedicines, deleteMedicine } from '../services/medicineService';
 import type { Medicine } from '../types';
 import './styles/Pillbox.css';
 
-// Импортируем SVG-иконки
 import goodIcon from '../assets/good.svg';
 import expireSoonIcon from '../assets/expire_soon.svg';
 import expiredIcon from '../assets/expired.svg';
@@ -38,7 +36,6 @@ export function Pillbox() {
     fetchMedicines();
   }, []);
 
-  // Удаление препарата
   const handleDelete = async (id: number) => {
     if (!window.confirm('Вы уверены, что хотите удалить этот препарат?')) {
       return;
@@ -53,7 +50,7 @@ export function Pillbox() {
     }
   };
 
-  // Фильтрация по поиску
+
   const filteredMedicines = medicines.filter(med =>
     med.name.toLowerCase().includes(searchTerm.toLowerCase())
   );

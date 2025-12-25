@@ -1,8 +1,7 @@
-// src/pages/Login.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
-import { AxiosError } from 'axios'; // ← импортируем тип ошибки
+import { AxiosError } from 'axios'; 
 import { Header } from "../components/Header";
 import './styles/Login.css';
 

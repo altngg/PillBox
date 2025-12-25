@@ -1,4 +1,3 @@
-// src/pages/Reminder.tsx
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import { Header } from "../components/Header";
@@ -17,9 +16,7 @@ export function Reminder() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Проверяем, что medicineId передан
   if (!medicineId) {
-    // Если нет ID — возвращаем на аптечку
     navigate('/pillbox');
     return null;
   }
@@ -29,7 +26,6 @@ export function Reminder() {
     setLoading(true);
     setError(null);
 
-    // Преобразуем "7 дней" → 7
     const courseNum = parseInt(courseDays.replace(/\D/g, ''), 10);
     if (isNaN(courseNum) || courseNum <= 0) {
       setError('Укажите корректный курс (например, "7 дней")');
@@ -45,7 +41,6 @@ export function Reminder() {
         medicine_id: medicineId,
       });
 
-      // Возвращаемся на страницу препарата
       navigate(`/medicine/${medicineId}`);
     } catch (err) {
       console.error('Ошибка сохранения напоминания:', err);

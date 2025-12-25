@@ -37,7 +37,6 @@ export function Reminders() {
     fetchReminders();
   }, []);
 
-  // Удаление напоминания
   const handleDelete = async (id: number) => {
     if (!window.confirm('Удалить напоминание?')) return;
 
@@ -64,7 +63,6 @@ export function Reminders() {
           <div className="reminders-list">
             {remindersWithMedicine.map(reminder => (
               <div key={reminder.id} className="reminder-card">
-                {/* Крестик удаления */}
                 <button
                   onClick={() => handleDelete(reminder.id)}
                   className="delete-reminder-button"
