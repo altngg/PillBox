@@ -9,6 +9,11 @@ import { Reminder } from "./pages/Reminder";
 import { Profile } from "./pages/Profile";
 import { Medicine } from "./pages/Medicine";
 import { Reminders } from "./pages/Reminders";
+import { AdminUsers } from "./pages/Admin/AdminUsers";
+import { AdminMedicines } from "./pages/Admin/AdminMedicines";
+import { AdminReminders } from "./pages/Admin/AdminReminders";
+import { AdminRoute } from "./components/AdminRoute";
+import { AdminDashboard } from "./pages/Admin/AdminDashboard";
 
 import "./App.css";
 
@@ -71,6 +76,38 @@ const App: React.FC = () => {
             <ProtectedRoute>
               <Profile />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <AdminRoute>
+              <AdminUsers />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/medicines"
+          element={
+            <AdminRoute>
+              <AdminMedicines />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/reminders"
+          element={
+            <AdminRoute>
+              <AdminReminders />
+            </AdminRoute>
           }
         />
       </Routes>

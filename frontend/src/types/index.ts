@@ -59,3 +59,12 @@ export interface UserProfile {
   is_active: boolean;
   is_superuser: boolean;
 }
+
+export interface AdminReminderRaw {
+  id: number;
+  dosage: string;
+  times_per_day: number;
+  course_days: number;
+  medicine_id: number;
+  owner_id: number;
+}

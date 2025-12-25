@@ -65,3 +65,24 @@
   margin: 0;
   font-size: 16px;
 }
+
+
+.admin-profile-link {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.admin-button {
+  padding: 10px 20px;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: "Geologica";
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.admin-button:hover {
+  background-color: #b71c1c;
+}
