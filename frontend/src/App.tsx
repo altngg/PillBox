@@ -9,33 +9,21 @@ import { Reminder } from "./pages/Reminder";
 import { Profile } from "./pages/Profile";
 import { Medicine } from "./pages/Medicine";
 import { Reminders } from "./pages/Reminders";
+import { AdminDashboard } from "./pages/Admin/AdminDashboard";
 import { AdminUsers } from "./pages/Admin/AdminUsers";
 import { AdminMedicines } from "./pages/Admin/AdminMedicines";
 import { AdminReminders } from "./pages/Admin/AdminReminders";
-import { AdminRoute } from "./components/AdminRoute";
-import { AdminDashboard } from "./pages/Admin/AdminDashboard";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import "./App.css";
-
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const token = localStorage.getItem("access_token");
-  if (!token) {
-    // Если нет токена — перенаправляем на логин
-    return <Navigate to="/login" replace />;
-  }
-  return <>{children}</>;
-};
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Публичные маршруты */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        {/* Защищённые маршруты */}
         <Route
           path="/pillbox"
           element={
@@ -44,7 +32,6 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        
         <Route
           path="/addmed"
           element={
@@ -81,34 +68,38 @@ const App: React.FC = () => {
         <Route
           path="/admin"
           element={
-            <AdminRoute>
+            <ProtectedRoute requireAdmin>
               <AdminDashboard />
-            </AdminRoute>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin/users"
           element={
-            <AdminRoute>
+            <ProtectedRoute requireAdmin>
               <AdminUsers />
-            </AdminRoute>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin/medicines"
           element={
-            <AdminRoute>
+            <ProtectedRoute requireAdmin>
               <AdminMedicines />
-            </AdminRoute>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin/reminders"
           element={
-            <AdminRoute>
+            <ProtectedRoute requireAdmin>
               <AdminReminders />
-            </AdminRoute>
+            </ProtectedRoute>
           }
+        />
+        <Route
+          path="/admin/*"
+          element={<Navigate to="/admin" replace />}
         />
       </Routes>
     </BrowserRouter>

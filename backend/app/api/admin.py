@@ -21,7 +21,6 @@ def require_superuser(current_user: UserModel = Depends(get_current_user)) -> Us
         )
     return current_user
 
-# получение пользователей
 @router.get("/users", response_model=List[UserRead])
 def get_all_users(
     db: Session = Depends(get_db),

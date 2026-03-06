@@ -10,7 +10,6 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
-// Перехватчик запросов: добавляем токен
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('access_token');
@@ -22,13 +21,25 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Перехватчик ответов: обработка 401
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('access_token');
       window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 403) {
+      localStorage.setItem('lastError', JSON.stringify({
+        type: 'forbidden',
+        message: 'Доступ запрещён. Только администраторы могут видеть эту страницу.'
+      }));
     }
     return Promise.reject(error);
   }
