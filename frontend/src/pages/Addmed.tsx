@@ -1,75 +1,210 @@
 import { Header } from "../components/Header";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { createMedicine, updateMedicine, getMedicineById } from '../services/medicineService';
+import { AxiosError } from 'axios';
 import './styles/Addmed.css';
 
-export function Addmed () {
-    const navigate = useNavigate();
+export function Addmed() {
+  const [searchParams] = useSearchParams();
+  const editId = searchParams.get('editId');
+  
+  const [name, setName] = useState('');
+  const [form, setForm] = useState('таблетки');
+  const [purpose, setPurpose] = useState('');
+  const [manufactured, setManufactured] = useState('');
+  const [expires, setExpires] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+
+  useEffect(() => {
+    const loadMedicine = async () => {
+      if (!editId) return;
+
+      try {
+        const med = await getMedicineById(Number(editId));
+        setName(med.name);
+        setForm(med.form);
+        setPurpose(med.purpose || '');
+        
+        
+        const formatDate = (dateStr?: string): string => {
+          if (!dateStr) return '';
+          const [year, month, day] = dateStr.split('-');
+          return `${day}.${month}.${year}`;
+        };
+        
+        setManufactured(formatDate(med.manufacture_date));
+        setExpires(formatDate(med.expiry_date));
+        setIsEditing(true);
+      } catch (err) {
+        console.error('Ошибка загрузки препарата:', err);
+        alert('Не удалось загрузить препарат для редактирования');
+        navigate('/pillbox');
+      }
+    };
+
+    loadMedicine();
+  }, [editId, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Препарат добавлен');
-    navigate('/pillbox'); 
+    setLoading(true);
+    setError(null);
+
+    const parseDate = (dateStr: string): string | undefined => {
+      if (!dateStr) return undefined;
+      const parts = dateStr.split('.');
+      if (parts.length === 3) {
+        const [day, month, year] = parts;
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      }
+      return undefined;
+    };
+
+    const manufactureDate = parseDate(manufactured);
+    const expiryDate = parseDate(expires);
+
+    if (!expiryDate) {
+      setError('Неверный формат даты "Годен до". Используйте ДД.ММ.ГГГГ');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      if (isEditing && editId) {
+        await updateMedicine(Number(editId), {
+          name,
+          form,
+          purpose: purpose || undefined,
+          manufacture_date: manufactureDate,
+          expiry_date: expiryDate,
+        });
+      } else {
+        await createMedicine({
+          name,
+          form,
+          purpose: purpose || undefined,
+          manufacture_date: manufactureDate,
+          expiry_date: expiryDate,
+        });
+      }
+
+      navigate('/pillbox');
+    } catch (err) {
+      console.error('Ошибка сохранения:', err);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 422) {
+          setError('Проверьте данные: все поля обязательны, даты в формате ДД.ММ.ГГГГ');
+        } else {
+          setError('Не удалось сохранить препарат. Попробуйте позже.');
+        }
+      } else {
+        setError('Ошибка сети');
+      }
+      setLoading(false);
+    }
   };
-    return(
-        <div>
-            <Header />
-                 <div className="add-med-container">
-                    <h1 className="add-med-title">Добавить препарат</h1>
-                    
-                    <form onSubmit={handleSubmit} className="add-med-form">
-                        <div className="form-group">
-                        <label htmlFor="name">Название:</label>
-                        <input
-                            type="text"
-                            id="name"
-                            placeholder=""
-                            required
-                            className="form-input"
-                        />
-                        </div>
 
-                        <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="manufactured">Изготовлен:</label>
-                            <input
-                            type="text"
-                            id="manufactured"
-                            placeholder="ДД.ММ.ГГГГ"
-                            pattern="\d{2}\.\d{2}\.\d{4}"
-                            required
-                            className="form-input-date"
-                            />
-                        </div>
+  const title = isEditing ? 'Редактировать препарат' : 'Добавить препарат';
 
-                        <div className="form-group">
-                            <label htmlFor="expires">Годен до:</label>
-                            <input
-                            type="text"
-                            id="expires"
-                            placeholder="ДД.ММ.ГГГГ"
-                            pattern="\d{2}\.\d{2}\.\d{4}"
-                            required
-                            className="form-input-date"
-                            />
-                        </div>
-                        </div>
+  return (
+    <div>
+      <Header />
+      <div className="add-med-container">
+        <h1 className="add-med-title">{title}</h1>
 
-                        <div className="form-group">
-                        <label htmlFor="purpose">Назначение:</label>
-                        <textarea
-                            id="purpose"
-                            placeholder=""
-                            rows={4}
-                            required
-                            className="form-textarea"
-                        />
-                        </div>
+        {error && <div className="form-error">{error}</div>}
 
-                        <button type="submit" className="confirm-button">
-                        Подтвердить
-                        </button>
-                    </form>
+        <form onSubmit={handleSubmit} className="add-med-form">
+          <div className="form-group">
+            <label htmlFor="name">Название:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="form-input"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="form">Форма препарата:</label>
+            <select
+              id="form"
+              name="form"
+              value={form}
+              onChange={(e) => setForm(e.target.value)}
+              required
+              className="form-input"
+            >
+              <option value="таблетки">Таблетки</option>
+              <option value="капсулы">Капсулы</option>
+              <option value="мазь">Мазь</option>
+              <option value="капли">Капли</option>
+              <option value="сироп">Сироп</option>
+              <option value="инъекции">Инъекции</option>
+            </select>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="manufactured">Изготовлен:</label>
+              <input
+                type="text"
+                id="manufactured"
+                name="manufactured"
+                value={manufactured}
+                onChange={(e) => setManufactured(e.target.value)}
+                placeholder="ДД.ММ.ГГГГ"
+                pattern="\d{2}\.\d{2}\.\d{4}"
+                className="form-input-date"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="expires">Годен до:</label>
+              <input
+                type="text"
+                id="expires"
+                name="expires"
+                value={expires}
+                onChange={(e) => setExpires(e.target.value)}
+                placeholder="ДД.ММ.ГГГГ"
+                pattern="\d{2}\.\d{2}\.\d{4}"
+                required
+                className="form-input-date"
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="purpose">Назначение:</label>
+            <textarea
+              id="purpose"
+              name="purpose"
+              value={purpose}
+              onChange={(e) => setPurpose(e.target.value)}
+              placeholder=""
+              rows={4}
+              className="form-textarea"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            className="confirm-button"
+            disabled={loading}
+          >
+            {loading ? 'Сохранение...' : isEditing ? 'Сохранить изменения' : 'Подтвердить'}
+          </button>
+        </form>
+      </div>
     </div>
-        </div>
-    );
+  );
 }

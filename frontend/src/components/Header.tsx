@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import Icon from "../assets/Icon.png";
 import Line from "../assets/Line.png";
 import Profile from "../assets/Profile.png";
+import { logout } from "../services/authService";
 
 export function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,13 +11,12 @@ export function Header() {
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Проверяем, залогинен ли пользователь
+ 
   useEffect(() => {
-    const loggedIn = localStorage.getItem("isAuthenticated") === "true";
-    setIsAuthenticated(loggedIn);
+    const token = localStorage.getItem("access_token");
+    setIsAuthenticated(token !== null); 
   }, []);
 
-  // Закрытие меню при клике вне его
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -33,21 +33,18 @@ export function Header() {
     };
   }, [isMenuOpen]);
 
-  const openMenu = () => {
-    setIsMenuOpen(true);
-  };
-
   const handleProfileClick = () => {
-    // Если меню закрыто — открываем его
-    if (!isMenuOpen) {
-      openMenu();
-    }
-    // Если уже открыто — можно оставить как есть или закрыть (но лучше управлять через пункты)
+    setIsMenuOpen(true);
   };
 
   const goToProfile = () => {
     setIsMenuOpen(false);
-    navigate('/profile'); // если нет — можно на /pillbox
+    navigate('/profile');
+  };
+  
+  const goToPillbox = () => {
+    setIsMenuOpen(false);
+    navigate('/pillbox');
   };
 
   const goToReminders = () => {
@@ -56,7 +53,7 @@ export function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
+    logout();
     setIsAuthenticated(false);
     setIsMenuOpen(false);
     navigate('/');
@@ -71,30 +68,22 @@ export function Header() {
       <div className="menu-buttons">
         {isAuthenticated ? (
           <div className="profile-menu-container" ref={menuRef}>
-            {/* div как "ссылка-кнопка" для открытия меню */}
             <div onClick={handleProfileClick} className="profile-link">
               <img src={Profile} alt="Профиль" className="profile-icon" />
             </div>
 
-            {/* Всплывающее меню */}
             {isMenuOpen && (
               <div className="profile-dropdown-menu">
-                <div
-                  onClick={goToProfile}
-                  className="dropdown-item"
-                >
+                <div onClick={goToProfile} className="dropdown-item">
                   Профиль
                 </div>
-                <div
-                  onClick={goToReminders}
-                  className="dropdown-item"
-                >
+                <div onClick={goToPillbox} className="dropdown-item">
+                  Аптечка
+                </div>
+                <div onClick={goToReminders} className="dropdown-item">
                   Напоминания
                 </div>
-                <div
-                  onClick={handleLogout}
-                  className="dropdown-item logout"
-                >
+                <div onClick={handleLogout} className="dropdown-item logout">
                   Выйти
                 </div>
               </div>

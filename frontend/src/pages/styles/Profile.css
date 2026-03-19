@@ -1,0 +1,88 @@
+.profile-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.profile-title {
+  font-family: "Geologica";
+  color: #399E8A;
+  font-size: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 4px solid #399E8A;
+  text-align: left;
+}
+
+.profile-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
+}
+
+.profile-info,
+.profile-stats {
+  flex: 1;
+  min-width: 250px;
+}
+
+.profile-info p {
+  font-family: "Geologica";
+  font-size: 16px;
+  color: #399E8A;
+  margin: 10px 0;
+}
+
+.profile-info strong {
+  color: #2c7a6e;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 20px;
+}
+
+.stat-card {
+  background-color: #e2f3ed;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  border-top: 4px solid #66CDA8;
+  flex: 1;
+}
+
+.stat-card h3 {
+  font-family: "Geologica";
+  color: #399E8A;
+  font-size: 32px;
+  margin: 0 0 10px 0;
+}
+
+.stat-card p {
+  font-family: "Geologica";
+  color: #555;
+  margin: 0;
+  font-size: 16px;
+}
+
+
+.admin-profile-link {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.admin-button {
+  padding: 10px 20px;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: "Geologica";
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.admin-button:hover {
+  background-color: #b71c1c;
+}

@@ -1,6 +1,6 @@
 .login-container {
   max-width: 400px;
-  margin: auto; /* отступ сверху/снизу */
+  margin: auto; 
   padding: 30px;
   background-color: #fff;
 }
@@ -65,4 +65,10 @@
 
 .login-button:hover {
   background-color: #2c7a6e;
+}
+
+.login-error {
+  color: #d32f2f;
+  margin-bottom: 16px;
+  font-size: 14px;
 }

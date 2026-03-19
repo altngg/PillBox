@@ -1,0 +1,64 @@
+.reminders-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.reminders-title {
+  font-family: "Geologica";
+  color: #399E8A;
+  font-size: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 4px solid #399E8A;
+  text-align: left;
+}
+
+.reminders-list {
+  margin-top: 20px;
+}
+
+.reminder-card {
+  background-color: #d9f5ef;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-left: 4px solid #66CDA8;
+  position: relative;
+}
+
+.delete-reminder-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #399E8A; 
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+  opacity: 0.7;
+}
+
+.delete-reminder-button:hover {
+  opacity: 1;
+  background-color: rgba(57, 158, 138, 0.1); 
+}
+
+.reminder-card h3 {
+  margin: 0 0 10px 0;
+  color: #399E8A;
+  font-family: "Geologica";
+}
+
+.reminder-card p {
+  margin: 4px 0;
+  font-family: "Geologica";
+  color: #274740;
+}
