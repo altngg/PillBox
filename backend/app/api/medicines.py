@@ -1,22 +1,20 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi import Path
-from app.models.medicine import Medicine as MedicineModel  
+from fastapi import APIRouter, Depends, HTTPException, status, Path, Request
+from app.models.medicine import Medicine as MedicineModel
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, and_
-from jose import JWTError, jwt
 from typing import List
+from jose import JWTError
 
-from app.database import get_db  
-from app.core.security import oauth2_scheme, SECRET_KEY, ALGORITHM
+from app.database import get_db
+from app.auth.jwt import decode_token
 
 from app.models.user import User
-from app.crud.medicine import get_medicines, create_medicine, delete_medicine, update_medicine
+from app.api.medicine import get_medicines, create_medicine, delete_medicine, update_medicine
 from app.schemas.medicine import MedicineCreate, Medicine
 
 router = APIRouter(prefix="/medicines", tags=["medicines"])
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme), 
+    request: Request,
     db: Session = Depends(get_db)
 ) -> User:
     credentials_exception = HTTPException(
@@ -24,17 +22,23 @@ def get_current_user(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise credentials_exception
-    except JWTError:
+
+    token = request.cookies.get("access_token")
+
+    if not token:
         raise credentials_exception
-    
-    user = db.query(User).filter(User.email == email).first()
+
+    try:
+        payload = decode_token(token)
+        user_id = int(payload.get("sub"))
+    except (JWTError, TypeError, ValueError):
+        raise credentials_exception
+
+    user = db.query(User).filter(User.id == user_id).first()
+
     if user is None:
         raise credentials_exception
+
     return user
 
 
@@ -53,7 +57,6 @@ def get_user_medicine(
             detail="Medicine not found or not owned by you"
         )
     return medicine
-
 
 
 @router.post("/", response_model=Medicine)
@@ -76,13 +79,13 @@ def read_medicines(
     current_user: User = Depends(get_current_user)
 ):
     query = db.query(MedicineModel).filter(MedicineModel.owner_id == current_user.id)
-    
+
     if name:
         query = query.filter(MedicineModel.name.ilike(f"%{name}%"))
-    
+
     if purpose:
         query = query.filter(MedicineModel.purpose.ilike(f"%{purpose}%"))
-    
+
     return query.all()
 
 @router.get("/{medicine_id}", response_model=Medicine)
@@ -104,7 +107,7 @@ def update_medicine(
     medicine = get_user_medicine(medicine_id, db, current_user)
     for field, value in medicine_update.model_dump(exclude_unset=True).items():
         setattr(medicine, field, value)
-    
+
     db.commit()
     db.refresh(medicine)
     return medicine

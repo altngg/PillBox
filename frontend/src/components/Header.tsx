@@ -1,63 +1,62 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
-import Icon from "../assets/Icon.png";
-import Line from "../assets/Line.png";
-import Profile from "../assets/Profile.png";
-import { logout } from "../services/authService";
+import { NavLink, useNavigate } from "react-router-dom"
+import { useEffect, useState, useRef } from "react"
+import Icon from "../assets/Icon.png"
+import Line from "../assets/Line.png"
+import Profile from "../assets/Profile.png"
+import { useAuth } from "../context/AuthContext"
 
 export function Header() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  const menuRef = useRef<HTMLDivElement>(null);
-
- 
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    setIsAuthenticated(token !== null); 
-  }, []);
+  const { isAuth, logout } = useAuth()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const navigate = useNavigate()
+  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    if (!isAuth) {
+      setIsMenuOpen(false)
+    }
+  }, [isAuth])
+
+  useEffect(() => {
+    const handleClickOutside = function (event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
+        setIsMenuOpen(false)
       }
-    };
-
-    if (isMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
     }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isMenuOpen]);
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+
+    return function () {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isMenuOpen])
 
   const handleProfileClick = () => {
-    setIsMenuOpen(true);
-  };
+    setIsMenuOpen(true)
+  }
 
   const goToProfile = () => {
-    setIsMenuOpen(false);
-    navigate('/profile');
-  };
-  
+    setIsMenuOpen(false)
+    navigate("/profile")
+  }
+
   const goToPillbox = () => {
-    setIsMenuOpen(false);
-    navigate('/pillbox');
-  };
+    setIsMenuOpen(false)
+    navigate("/pillbox")
+  }
 
   const goToReminders = () => {
-    setIsMenuOpen(false);
-    navigate('/reminders');
-  };
+    setIsMenuOpen(false)
+    navigate("/reminders")
+  }
 
-  const handleLogout = () => {
-    logout();
-    setIsAuthenticated(false);
-    setIsMenuOpen(false);
-    navigate('/');
-  };
+  const handleLogout = async () => {
+    await logout()
+    setIsMenuOpen(false)
+    navigate("/")
+  }
 
   return (
     <div className="header-container">
@@ -66,7 +65,7 @@ export function Header() {
       </NavLink>
 
       <div className="menu-buttons">
-        {isAuthenticated ? (
+        {isAuth ? (
           <div className="profile-menu-container" ref={menuRef}>
             <div onClick={handleProfileClick} className="profile-link">
               <img src={Profile} alt="Профиль" className="profile-icon" />
@@ -102,5 +101,5 @@ export function Header() {
         )}
       </div>
     </div>
-  );
+  )
 }

@@ -1,43 +1,45 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../services/authService';
-import { AxiosError } from 'axios'; 
-import { Header } from "../components/Header";
-import './styles/Login.css';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { AxiosError } from "axios"
+import { Header } from "../components/Header"
+import { useAuth } from "../context/AuthContext"
+
+import "./styles/Login.css"
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
     try {
-      await login({ email, password });
-      navigate('/pillbox', { replace: true });
+      await login(email, password)
+      navigate("/pillbox", { replace: true })
     } catch (err) {
-      console.error('Login error:', err);
+      console.error("Login error:", err)
 
       if (err instanceof AxiosError) {
         if (err.response?.status === 401) {
-          setError('Неверный email или пароль');
+          setError("Неверный email или пароль")
         } else if (err.response?.status === 422) {
-          setError('Проверьте правильность email и пароля');
+          setError("Проверьте правильность email и пароля")
         } else {
-          setError('Ошибка подключения к серверу');
+          setError("Ошибка подключения к серверу")
         }
       } else {
-        setError('Ошибка сети или сервер недоступен');
+        setError("Ошибка сети или сервер недоступен")
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div>
@@ -70,15 +72,15 @@ export function Login() {
             />
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="login-button"
             disabled={loading}
           >
-            {loading ? 'Вход...' : 'Продолжить'}
+            {loading ? "Вход..." : "Продолжить"}
           </button>
         </form>
       </div>
     </div>
-  );
+  )
 }

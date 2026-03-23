@@ -1,50 +1,47 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { register, login } from '../services/authService';
-import { AxiosError } from 'axios';
-import { Header } from "../components/Header";
-import './styles/Register.css';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { register } from "../services/authService"
+import { AxiosError } from "axios"
+import { Header } from "../components/Header"
+import { useAuth } from "../context/AuthContext"
+import "./styles/Register.css"
 
 export function Register() {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
     try {
-      // 1. Регистрация
-      await register({ username, email, password });
-
-      // 2. Автоматический вход после регистрации
-      await login({ email, password });
-
-      // 3. Переход в личный кабинет
-      navigate('/pillbox', { replace: true });
+      await register({ username, email, password })
+      await login(email, password)
+      navigate("/pillbox", { replace: true })
     } catch (err) {
-      console.error('Register error:', err);
+      console.error("Register error:", err)
 
       if (err instanceof AxiosError) {
         if (err.response?.status === 400 && err.response.data.detail === "Email already registered") {
-          setError('Пользователь с таким email уже существует');
+          setError("Пользователь с таким email уже существует")
         } else if (err.response?.status === 422) {
-          setError('Проверьте правильность данных (email, пароль)');
+          setError("Проверьте правильность данных (email, пароль)")
         } else {
-          setError('Ошибка при регистрации. Попробуйте позже.');
+          setError("Ошибка при регистрации. Попробуйте позже.")
         }
       } else {
-        setError('Ошибка сети или сервер недоступен');
+        setError("Ошибка сети или сервер недоступен")
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div>
@@ -88,15 +85,15 @@ export function Register() {
             />
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="register-button"
             disabled={loading}
           >
-            {loading ? 'Регистрация...' : 'Продолжить'}
+            {loading ? "Регистрация..." : "Продолжить"}
           </button>
         </form>
       </div>
     </div>
-  );
+  )
 }

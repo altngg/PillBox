@@ -1,15 +1,9 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import "../styles/Admin.css";
 
 export function ForbiddenPage() {
   const navigate = useNavigate();
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem('lastError');
-    };
-  }, []);
 
   return (
     <div>
