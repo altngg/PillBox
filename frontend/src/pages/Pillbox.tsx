@@ -1,6 +1,7 @@
 import { Header } from "../components/Header";
 import { AddButton } from '../components/AddButton';
-import { useNavigate, useSearchParams } from 'react-router-dom'; 
+import { SEO } from "../components/SEO";
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState, useMemo } from 'react';
 import { getMedicines, deleteMedicine } from '../services/medicineService';
 import type { Medicine } from '../types';
@@ -11,7 +12,7 @@ import expireSoonIcon from '../assets/expire_soon.svg';
 import expiredIcon from '../assets/expired.svg';
 
 export function Pillbox() {
-  const [searchParams, setSearchParams] = useSearchParams(); 
+  const [searchParams, setSearchParams] = useSearchParams();
   
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,8 +101,14 @@ export function Pillbox() {
 
   return (
     <div>
+      <SEO 
+        title="Моя аптечка"
+        description={`Управление препаратами: ${medicines.length} лекарств в вашей аптечке`}
+      />
+      
       <Header />
-      <div className="pillbox-container">
+      
+      <main className="pillbox-container">
         <div className="pillbox-header">
           <div className="header-left">
             <div className="stats">Добавлено лекарств: {medicines.length}</div>
@@ -147,7 +154,7 @@ export function Pillbox() {
                   onClick={() => { 
                     setPurposeFilter(''); 
                     setSortOrder('asc'); 
-                    setSearchParams({}); 
+                    setSearchParams({});
                   }}
                   className="reset-button"
                 >
@@ -169,7 +176,7 @@ export function Pillbox() {
         ) : (
           <div className="medicines-list">
             {filteredMedicines.map(med => (
-              <div 
+              <article 
                 key={med.id} 
                 className="medicine-item" 
                 onClick={() => navigate(`/medicine/${med.id}`)} 
@@ -188,17 +195,17 @@ export function Pillbox() {
                 <button 
                   onClick={(e) => { e.stopPropagation(); handleDelete(med.id); }}
                   className="delete-button"
-                  aria-label="Удалить препарат"
+                  aria-label={`Удалить препарат ${med.name}`}
                 >
                   ✕
                 </button>
-              </div>
+              </article>
             ))}
           </div>
         )}
 
         <AddButton onClick={handleAddMedicine} />
-      </div>
+      </main>
     </div>
   );
 }

@@ -6,6 +6,8 @@ from app.api.admin import router as admin_router
 from app.api import auth
 from app.database import Base, engine
 from app.core.minio_client import init_bucket
+from app.api import seo
+from app.api import external
 
 Base.metadata.create_all(bind=engine)
 
@@ -31,6 +33,8 @@ app.include_router(medicines_router)
 app.include_router(reminders_router)
 app.include_router(auth.router)
 app.include_router(admin_router)
+app.include_router(seo.router)
+app.include_router(external.router)
 
 @app.get("/")
 def root():

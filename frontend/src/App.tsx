@@ -21,7 +21,6 @@ import "./App.css"
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -104,7 +103,6 @@ const App: React.FC = () => {
             element={<Navigate to="/admin" replace />}
           />
         </Routes>
-      </BrowserRouter>
     </AuthProvider>
   )
 }

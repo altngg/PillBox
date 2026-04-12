@@ -2,6 +2,8 @@ import { Header } from "../components/Header";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getMedicineById } from '../services/medicineService';
+import { SEO } from '../components/SEO';
+import { DrugInfoCard } from '../components/DrugInfoCard';
 import type { Medicine } from '../types';
 import './styles/Medicine.css';
 
@@ -69,15 +71,36 @@ export function Medicine() {
 
   return (
     <div>
-      <Header />
-      <div className="medicine-container">
-        <h1 className="medicine-title">{medicine.name}</h1>
+      <SEO 
+        title={medicine.name}
+        description={`Информация о препарате ${medicine.name}. Форма: ${medicine.form}. ${medicine.purpose || ''}`}
+        ogType="product"
+      />
+      
+      <script type="application/ld+json" dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Drug",
+          "name": medicine.name,
+          "description": medicine.purpose || "Лекарственный препарат",
+          "image": medicine.photo_url || "",
+          "brand": {
+            "@type": "Brand",
+            "name": medicine.form
+          }
+        })
+      }} />
 
+      <Header />
+      <main className="medicine-container">
+        <h1 className="medicine-title">{medicine.name}</h1>
+        <DrugInfoCard drugName={medicine.name} />
         {medicine.photo_url && (
           <div className="medicine-photo-container">
             <img 
               src={medicine.photo_url} 
-              alt={medicine.name}
+              alt={`Фотография препарата ${medicine.name}`}
+              loading="lazy"
               className="medicine-photo"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
@@ -121,7 +144,7 @@ export function Medicine() {
             </button>
           </div>
         </div>
-
+        
         <div className="medicine-actions">
           <button 
             onClick={() => navigate(`/addmed?editId=${medicine.id}`)} 
@@ -130,7 +153,7 @@ export function Medicine() {
             Редактировать
            </button>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
