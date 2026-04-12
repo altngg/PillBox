@@ -73,6 +73,19 @@ export function Medicine() {
       <div className="medicine-container">
         <h1 className="medicine-title">{medicine.name}</h1>
 
+        {medicine.photo_url && (
+          <div className="medicine-photo-container">
+            <img 
+              src={medicine.photo_url} 
+              alt={medicine.name}
+              className="medicine-photo"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          </div>
+        )}
+
         <div className="medicine-info">
           <div className="info-row">
             <span className="label">Дата изготовления:</span>

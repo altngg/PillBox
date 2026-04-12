@@ -1,5 +1,5 @@
 from __future__ import annotations
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel, computed_field, Field
 from datetime import date, timedelta
 from typing import List, Optional
 
@@ -9,13 +9,26 @@ class MedicineBase(BaseModel):
     purpose: Optional[str] = None
     manufacture_date: Optional[date] = None
     expiry_date: Optional[date] = None
+    photo_url: Optional[str] = None
+
 
 class MedicineCreate(MedicineBase):
     pass
 
+
+class MedicineUpdate(BaseModel):
+    name: Optional[str] = None
+    form: Optional[str] = None
+    purpose: Optional[str] = None
+    manufacture_date: Optional[date] = None
+    expiry_date: Optional[date] = None
+    photo_url: Optional[str] = None
+
+
 class Medicine(MedicineBase):
     id: int
-    reminders: List[Reminder] = []
+    owner_id: int
+    reminders: List[dict] = []
 
     @computed_field
     @property
@@ -34,4 +47,28 @@ class Medicine(MedicineBase):
     class Config:
         from_attributes = True
 
-from app.schemas.reminder import Reminder
+
+# pagination
+class PaginationParams(BaseModel):
+    page: int = Field(default=1, ge=1, description="Номер страницы")
+    size: int = Field(default=10, ge=1, le=100, description="Размер страницы")
+    sort_by: Optional[str] = Field(default=None, description="Поле для сортировки")
+    sort_order: Optional[str] = Field(default="asc", pattern="^(asc|desc)$", description="Порядок сортировки")
+
+
+class PaginatedResponse(BaseModel):
+    items: List[Medicine]
+    total: int
+    page: int
+    size: int
+    pages: int
+
+    @computed_field
+    @property
+    def has_next(self) -> bool:
+        return self.page < self.pages
+
+    @computed_field
+    @property
+    def has_prev(self) -> bool:
+        return self.page > 1

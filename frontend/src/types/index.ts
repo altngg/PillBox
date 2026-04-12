@@ -13,21 +13,55 @@ export interface AuthResponse {
 }
 
 export interface Medicine {
-  id: number;
-  name: string;
-  form: string;
-  purpose?: string;
-  manufacture_date?: string; 
-  expiry_date?: string;
-  status: string;
+    id: number;
+    name: string;
+    form: string;
+    purpose?: string;
+    manufacture_date?: string;
+    expiry_date?: string;
+    photo_url?: string;  
+    status: string;
+    owner_id: number;    
 }
 
 export interface MedicineCreate {
-  name: string;
-  form: string;
-  purpose?: string;
-  manufacture_date?: string;
-  expiry_date?: string;
+    name: string;
+    form: string;
+    purpose?: string;
+    manufacture_date?: string;
+    expiry_date?: string;
+    photo_url?: string;  
+}
+
+export interface PaginationParams {
+    page?: number;
+    size?: number;
+    sort_by?: string;
+    sort_order?: 'asc' | 'desc';
+    name?: string;
+    purpose?: string;
+    form?: string;
+    date_from?: string;
+    date_to?: string;
+    status?: 'expired' | 'expiring_soon' | 'valid' | 'unknown';
+}
+
+export interface PaginatedResponse<T> {
+    items: T[];
+    total: number;
+    page: number;
+    size: number;
+    pages: number;
+    has_next: boolean;
+    has_prev: boolean;
+}
+ 
+export interface FileUploadResponse {
+    photo_url: string;
+}
+
+export interface FileUploadError {
+    detail: string;
 }
 
 export interface Reminder {

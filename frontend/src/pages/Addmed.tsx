@@ -1,7 +1,7 @@
 import { Header } from "../components/Header";
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { createMedicine, updateMedicine, getMedicineById } from '../services/medicineService';
+import { useState, useEffect, useRef } from 'react';
+import { createMedicine, updateMedicine, getMedicineById, uploadMedicinePhoto } from '../services/medicineService';
 import { AxiosError } from 'axios';
 import './styles/Addmed.css';
 
@@ -14,11 +14,16 @@ export function Addmed() {
   const [purpose, setPurpose] = useState('');
   const [manufactured, setManufactured] = useState('');
   const [expires, setExpires] = useState('');
+  
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const loadMedicine = async () => {
@@ -29,7 +34,10 @@ export function Addmed() {
         setName(med.name);
         setForm(med.form);
         setPurpose(med.purpose || '');
-        
+
+        if (med.photo_url) {
+          setPhotoPreview(med.photo_url);
+        }
         
         const formatDate = (dateStr?: string): string => {
           if (!dateStr) return '';
@@ -49,6 +57,40 @@ export function Addmed() {
 
     loadMedicine();
   }, [editId, navigate]);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('Разрешены только изображения: JPG, PNG, WebP');
+      return;
+    }
+    
+    const maxSize = 5 * 1024 * 1024; 
+    if (file.size > maxSize) {
+      setError('Размер файла не должен превышать 5 МБ');
+      return;
+    }
+
+    setSelectedFile(file);
+    setError(null);
+    
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPhotoPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemovePhoto = () => {
+    setSelectedFile(null);
+    setPhotoPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +117,8 @@ export function Addmed() {
     }
 
     try {
+      let medicineId: number;
+      
       if (isEditing && editId) {
         await updateMedicine(Number(editId), {
           name,
@@ -83,14 +127,28 @@ export function Addmed() {
           manufacture_date: manufactureDate,
           expiry_date: expiryDate,
         });
+        medicineId = Number(editId);
       } else {
-        await createMedicine({
+        const newMed = await createMedicine({
           name,
           form,
           purpose: purpose || undefined,
           manufacture_date: manufactureDate,
           expiry_date: expiryDate,
         });
+        medicineId = newMed.id;
+      }
+
+      if (selectedFile && medicineId) {
+        setUploading(true);
+        try {
+          await uploadMedicinePhoto(medicineId, selectedFile);
+        } catch (uploadErr) {
+          console.warn('Не удалось загрузить фото:', uploadErr);
+          setError('Препарат сохранён, но фото не загружено. Попробуйте позже.');
+        } finally {
+          setUploading(false);
+        }
       }
 
       navigate('/pillbox');
@@ -120,6 +178,41 @@ export function Addmed() {
         {error && <div className="form-error">{error}</div>}
 
         <form onSubmit={handleSubmit} className="add-med-form">
+          <div className="form-group photo-upload-group">
+            <label>Фотография препарата:</label>
+            
+            <div className="photo-upload-area">
+              {photoPreview ? (
+                <div className="photo-preview">
+                  <img src={photoPreview} alt="Превью" className="preview-image" />
+                  <button 
+                    type="button" 
+                    onClick={handleRemovePhoto}
+                    className="remove-photo-btn"
+                    disabled={uploading}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <label className="upload-label">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    accept="image/jpeg,image/png,image/webp"
+                    disabled={uploading}
+                    className="file-input-hidden"
+                  />
+                  <div className="upload-placeholder">
+                    <span>Выберите фото</span>
+                    <span className="upload-hint">JPG, PNG, WebP до 5 МБ</span>
+                  </div>
+                </label>
+              )}
+            </div>
+          </div>
+
           <div className="form-group">
             <label htmlFor="name">Название:</label>
             <input
@@ -199,9 +292,9 @@ export function Addmed() {
           <button 
             type="submit" 
             className="confirm-button"
-            disabled={loading}
+            disabled={loading || uploading}
           >
-            {loading ? 'Сохранение...' : isEditing ? 'Сохранить изменения' : 'Подтвердить'}
+            {loading ? 'Сохранение...' : uploading ? 'Загрузка фото...' : isEditing ? 'Сохранить изменения' : 'Подтвердить'}
           </button>
         </form>
       </div>

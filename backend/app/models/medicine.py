@@ -11,10 +11,9 @@ class Medicine(Base):
     purpose = Column(String)
     manufacture_date = Column(Date)
     expiry_date = Column(Date)
+    photo_url = Column(String, nullable=True)
     
-    # Внешний ключ к пользователю
     owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
-    # Связи
     owner = relationship("User", back_populates="medicines")
     reminders = relationship("Reminder", back_populates="medicine", cascade="all, delete-orphan")

@@ -5,11 +5,14 @@ from app.api.reminders import router as reminders_router
 from app.api.admin import router as admin_router
 from app.api import auth
 from app.database import Base, engine
-
+from app.core.minio_client import init_bucket
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="PillBox API")
+@app.on_event("startup")
+async def startup_event():
+    init_bucket()
 
 app.add_middleware(
     CORSMiddleware,
