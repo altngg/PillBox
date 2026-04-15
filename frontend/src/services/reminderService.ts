@@ -1,4 +1,4 @@
-import apiClient from '../api/сlient';
+import apiClient from '../api/client';
 import type { Reminder, ReminderCreate, ReminderUpdate } from '../types';
 
 export const getReminders = async (): Promise<Reminder[]> => {

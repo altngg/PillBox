@@ -44,11 +44,7 @@ apiClient.interceptors.response.use(
     }
 )
 
-// ==================== НОВЫЕ МЕТОДЫ ДЛЯ РАБОТЫ С ФАЙЛАМИ ====================
 
-/**
- * Загрузка фотографии препарата
- */
 export const uploadMedicinePhoto = async (
     medicineId: number, 
     file: File
@@ -68,9 +64,7 @@ export const uploadMedicinePhoto = async (
     return response.data
 }
 
-/**
- * Получение URL для скачивания фотографии
- */
+
 export const getMedicinePhotoUrl = async (
     medicineId: number
 ): Promise<{ photo_url: string }> => {
@@ -78,9 +72,7 @@ export const getMedicinePhotoUrl = async (
     return response.data
 }
 
-/**
- * Удаление фотографии препарата
- */
+
 export const deleteMedicinePhoto = async (
     medicineId: number
 ): Promise<{ message: string }> => {
@@ -88,11 +80,7 @@ export const deleteMedicinePhoto = async (
     return response.data
 }
 
-// ==================== МЕТОД ДЛЯ ПАГИНИРОВАННОГО ПОЛУЧЕНИЯ СПИСКА ====================
 
-/**
- * Получение списка препаратов с параметрами фильтрации и пагинации
- */
 export const getMedicinesPaginated = async (
     params?: Record<string, any>
 ) => {
@@ -100,6 +88,6 @@ export const getMedicinesPaginated = async (
     return response.data
 }
 
-// ============================================================================
+
 
 export default apiClient

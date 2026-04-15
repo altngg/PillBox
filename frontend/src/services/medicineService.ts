@@ -1,4 +1,4 @@
-import apiClient from '../api/сlient';
+import apiClient from '../api/client';
 import type { Medicine, MedicineCreate } from '../types';
 
 export const getMedicines = async (params?: Record<string, string>): Promise<Medicine[] | any> => {

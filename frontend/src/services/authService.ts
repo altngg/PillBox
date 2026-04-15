@@ -1,4 +1,4 @@
-import apiClient from "../api/сlient"
+import apiClient from "../api/client"
 
 export interface UserLogin {
   email: string

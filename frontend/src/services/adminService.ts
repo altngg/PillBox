@@ -1,4 +1,4 @@
-import apiClient from '../api/сlient';
+import apiClient from '../api/client';
 import type { UserProfile } from '../types';
 import type { AdminReminderRaw } from '../types';
 

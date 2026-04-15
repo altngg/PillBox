@@ -1,1 +1,1 @@
-export { default } from "./сlient"
+export { default } from "./client"

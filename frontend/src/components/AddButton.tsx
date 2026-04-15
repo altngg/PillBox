@@ -8,7 +8,7 @@ interface AddButtonProps {
 export const AddButton: React.FC<AddButtonProps> = ({ onClick }) => {
   return (
     <div className="add-medicine-button">
-      <button onClick={onClick}>+</button>
+      <button onClick={onClick} data-testid="add-medicine-button">+</button>
     </div>
   );
 };
