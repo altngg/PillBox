@@ -43,8 +43,7 @@ class ExternalDrugService:
 
     async def get_drug_info(self, drug_name: str) -> Optional[Dict[str, Any]]:
         normalized = drug_name.strip().lower()
-        
-        # 1. Пробуем реальный API
+
         if API_KEY:
             try:
                 headers = {"X-Api-Key": API_KEY}
@@ -59,13 +58,11 @@ class ExternalDrugService:
                         if data and len(data) > 0:
                             return self._normalize_api_ninjas(data[0])
             except Exception:
-                pass  # Игнорируем ошибки сети, идём к фоллбэку
+                pass  
         
-        # 2. Фоллбэк на мок-данные
         if normalized in self._mock_cache:
             return self._mock_cache[normalized]
         
-        # 3. Поиск по частичному совпадению
         for key, value in self._mock_cache.items():
             if key in normalized or normalized in key:
                 return value

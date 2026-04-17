@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../pages/styles/DrugInfoCard.css';
+import apiClient from '../api/client';
 
 interface DrugInfo {
   brand_name?: string;
@@ -29,7 +30,7 @@ export function DrugInfoCard({ drugName }: DrugInfoCardProps) {
       setError(null);
       
       try {
-        const response = await axios.get(`http://localhost:8000/external/drug-info/${encodeURIComponent(drugName)}`);
+        const response = await apiClient.get(`/external/drug-info/${encodeURIComponent(drugName)}`);
         setDrugInfo(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {

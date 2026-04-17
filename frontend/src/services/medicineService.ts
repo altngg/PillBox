@@ -2,13 +2,13 @@ import apiClient from '../api/client';
 import type { Medicine, MedicineCreate } from '../types';
 
 export const getMedicines = async (params?: Record<string, string>): Promise<Medicine[] | any> => {
-    const response = await apiClient.get('/medicines', { params });
+    const response = await apiClient.get('/medicines/', { params });
     return response.data;
 };
 
 
 export const getMedicineById = async (id: number): Promise<Medicine> => {
-  const response = await apiClient.get<Medicine>(`/medicines/${id}/`);
+  const response = await apiClient.get<Medicine>(`/medicines/${id}`);
   return response.data;
 };
 
@@ -21,7 +21,7 @@ export const updateMedicine = async (
   id: number,
   medicine: Partial<MedicineCreate>
 ): Promise<Medicine> => {
-  const response = await apiClient.put<Medicine>(`/medicines/${id}/`, medicine);
+  const response = await apiClient.put<Medicine>(`/medicines/${id}`, medicine);
   return response.data;
 };
 
