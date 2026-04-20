@@ -60,16 +60,12 @@ class MinIOClient:
     
     def get_presigned_url(self, bucket_name: str, object_name: str, expires: int = 3600) -> str:
         try:
-            url = self.client.presigned_get_object(
-                bucket_name,
-                object_name,
-                expires=timedelta(seconds=expires)
-            )
+            public_url = os.getenv("MINIO_PUBLIC_URL", "http://localhost:9000")
             
-            url = url.replace("http://minio:9000", MINIO_PUBLIC_URL)
-            url = url.replace("https://minio:9000", MINIO_PUBLIC_URL.replace("http://", "https://"))
+            # url = url.replace("http://minio:9000", MINIO_PUBLIC_URL)
+            # url = url.replace("https://minio:9000", MINIO_PUBLIC_URL.replace("http://", "https://"))
             
-            return url
+            return f"{public_url}/{bucket_name}/{object_name}"
         except S3Error as e:
             print(f"Presigned URL error: {e}")
             raise
