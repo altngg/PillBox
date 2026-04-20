@@ -7,7 +7,7 @@ from app.schemas.user import UserCreate, UserRead
 from app.services.auth_service import AuthService
 from app.auth.jwt import decode_token
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(tags=["auth"])
 
 def set_auth_cookies(response, access_token, refresh_token):
     response.set_cookie(

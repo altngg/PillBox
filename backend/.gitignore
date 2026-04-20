@@ -10,3 +10,36 @@ __pycache__/
 
 # Environment
 .venv
+
+# Environment secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+
+# Docker
+!.dockerignore
+!Dockerfile.*
+!docker-compose.yml
+!nginx.conf
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

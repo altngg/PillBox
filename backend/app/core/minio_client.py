@@ -3,10 +3,13 @@ from minio import Minio
 from minio.error import S3Error
 from datetime import timedelta
 
+
+MINIO_PUBLIC_URL = os.getenv("MINIO_PUBLIC_URL", "http://localhost:9000")
 MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "localhost:9000")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
 MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minioadmin")
 MINIO_SECURE = os.getenv("MINIO_SECURE", "false").lower() == "true"
+
 
 MAX_FILE_SIZE = 5 * 1024 * 1024  
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
@@ -15,11 +18,10 @@ BUCKET_NAME = os.getenv("MINIO_BUCKET_NAME", "pillbox")
 
 
 class MinIOClient:
-    """Клиент для работы с MinIO"""
     
     def __init__(self):
         self.client = Minio(
-            MINIO_ENDPOINT,
+            "minio:9000",
             access_key=MINIO_ACCESS_KEY,
             secret_key=MINIO_SECRET_KEY,
             secure=MINIO_SECURE
@@ -57,19 +59,15 @@ class MinIOClient:
             raise
     
     def get_presigned_url(self, bucket_name: str, object_name: str, expires: int = 3600) -> str:
-        """Генерирует presigned URL для скачивания файла"""
         try:
-            return self.client.presigned_get_object(
-                bucket_name,
-                object_name,
-                expires=timedelta(seconds=expires)
-            )
+            public_url = os.getenv("MINIO_PUBLIC_URL", "http://localhost:9000")
+            
+            return f"{public_url}/{bucket_name}/{object_name}"
         except S3Error as e:
             print(f"Presigned URL error: {e}")
             raise
     
     def remove_object(self, bucket_name: str, object_name: str) -> bool:
-        """Удаляет объект из бакета"""
         try:
             self.client.remove_object(bucket_name, object_name)
             return True

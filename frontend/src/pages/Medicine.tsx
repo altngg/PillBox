@@ -19,6 +19,7 @@ export function Medicine() {
       try {
         const data = await getMedicineById(Number(id));
         setMedicine(data);
+        console.log('Medicine data:', data);
       } catch (error) {
         console.error('Ошибка загрузки препарата:', error);
         alert('Не удалось загрузить препарат');

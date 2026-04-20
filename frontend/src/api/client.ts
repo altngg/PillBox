@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const apiClient = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: "/api",  
     withCredentials: true
 })
 
@@ -25,11 +25,7 @@ apiClient.interceptors.response.use(
             originalRequest._retry = true
 
             try {
-                await axios.post(
-                    "http://localhost:8000/auth/refresh",
-                    {},
-                    { withCredentials: true }
-                )
+                await apiClient.post("/auth/refresh", {}, { withCredentials: true })
 
                 return apiClient(originalRequest)
             } catch (refreshError) {

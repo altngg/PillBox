@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Path, Query
 from typing import Optional
 from app.services.external_drug_api import external_drug_service
 
-router = APIRouter(prefix="/external", tags=["External API"])
+router = APIRouter(tags=["External API"])
 
 @router.get("/drug-info/{drug_name}")
 async def get_external_drug_info(drug_name: str = Path(..., description="Название препарата")):
