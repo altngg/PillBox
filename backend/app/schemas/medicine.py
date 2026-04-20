@@ -1,5 +1,5 @@
 from __future__ import annotations
-from pydantic import BaseModel, computed_field, Field
+from pydantic import BaseModel, computed_field, Field, ConfigDict
 from datetime import date, timedelta
 from typing import List, Optional
 
@@ -63,12 +63,7 @@ class PaginatedResponse(BaseModel):
     size: int
     pages: int
 
-    @computed_field
-    @property
-    def has_next(self) -> bool:
-        return self.page < self.pages
+    has_next: bool
+    has_prev: bool
 
-    @computed_field
-    @property
-    def has_prev(self) -> bool:
-        return self.page > 1
+    model_config = ConfigDict(from_attributes=True)

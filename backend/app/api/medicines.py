@@ -132,7 +132,9 @@ def read_medicines(
         total=total,
         page=page,
         size=size,
-        pages=pages
+        pages=pages,
+        has_next=page < pages,   
+        has_prev=page > 1
     )
 
 
