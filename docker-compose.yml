@@ -1,4 +1,3 @@
-
 services:
   nginx:
     build:
@@ -82,59 +81,50 @@ services:
 
   minio:
     image: minio/minio:latest
-    container_name: pillbox-minio
     ports:
       - "9000:9000"
       - "9001:9001"
     environment:
-      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY:-minioadmin}
-      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_KEY:-minioadmin}
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
     volumes:
-      - minio-data:/data
+      - pillbox-minio-data:/data
     command: server /data --console-address ":9001"
-    networks:
-      - pillbox-net
-    restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
-      timeout: 20s
+      interval: 10s
+      timeout: 5s
       retries: 3
-      start_period: 10s
+    networks:
+      - pillbox-net
 
   minio-init:
     image: minio/mc:latest
-    container_name: pillbox-minio-init
     depends_on:
       minio:
         condition: service_healthy
-    environment:
-      - MINIO_ENDPOINT=minio:9000
-      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
-      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
-      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME:-pillbox}
     entrypoint: >
       /bin/sh -c "
-      until /usr/bin/mc alias set pillbox http://minio:9000 $$MINIO_ACCESS_KEY $$MINIO_SECRET_KEY 2>/dev/null; do
-        sleep 2;
-      done;
-      /usr/bin/mc mb -p pillbox/$$MINIO_BUCKET_NAME 2>/dev/null || true;
-      /usr/bin/mc anonymous set public pillbox/$$MINIO_BUCKET_NAME 2>/dev/null || true;
+      mc alias set myminio http://minio:9000 minioadmin minioadmin &&
+      mc mb --ignore-existing myminio/pillbox &&
+      mc anonymous set download myminio/pillbox &&
+      echo 'MinIO bucket pillbox is public' &&
+      exit 0
       "
     networks:
       - pillbox-net
     profiles:
       - init
 
+volumes:
+  postgres-data:
+    name: pillbox-postgres-data
+  pillbox-minio-data:
+    name: pillbox-minio-data
+  backend-static:
+    name: pillbox-backend-static
+
 networks:
   pillbox-net:
     driver: bridge
     name: pillbox-net
-
-volumes:
-  postgres-data:
-    name: pillbox-postgres-data
-  minio-data:
-    name: pillbox-minio-data
-  backend-static:
-    name: pillbox-backend-static

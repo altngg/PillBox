@@ -34,7 +34,7 @@ app.include_router(reminders_router)
 app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(admin_router)
 app.include_router(seo.router)
-app.include_router(external.router)
+app.include_router(external.router, prefix="/api/external", tags=["External"])
 
 @app.get("/")
 def root():

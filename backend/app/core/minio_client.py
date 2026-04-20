@@ -3,12 +3,13 @@ from minio import Minio
 from minio.error import S3Error
 from datetime import timedelta
 
+
+MINIO_PUBLIC_URL = os.getenv("MINIO_PUBLIC_URL", "http://localhost:9000")
 MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "localhost:9000")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
 MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minioadmin")
 MINIO_SECURE = os.getenv("MINIO_SECURE", "false").lower() == "true"
 
-MINIO_PUBLIC_URL = os.getenv("MINIO_PUBLIC_URL", "http://localhost:9000")
 
 MAX_FILE_SIZE = 5 * 1024 * 1024  
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
