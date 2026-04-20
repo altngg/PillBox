@@ -16,7 +16,7 @@ from app.schemas.medicine import (
 )
 from app.core.minio_client import minio_client, ALLOWED_EXTENSIONS, MAX_FILE_SIZE
 
-router = APIRouter(prefix="/medicines", tags=["medicines"])
+router = APIRouter(tags=["medicines"])
 
 
 def get_current_user(

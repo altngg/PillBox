@@ -25,11 +25,7 @@ apiClient.interceptors.response.use(
             originalRequest._retry = true
 
             try {
-                await axios.post(
-                    "http://localhost:8000/auth/refresh",
-                    {},
-                    { withCredentials: true }
-                )
+                await apiClient.post("/auth/refresh", {}, { withCredentials: true })
 
                 return apiClient(originalRequest)
             } catch (refreshError) {
