@@ -62,9 +62,6 @@ class MinIOClient:
         try:
             public_url = os.getenv("MINIO_PUBLIC_URL", "http://localhost:9000")
             
-            # url = url.replace("http://minio:9000", MINIO_PUBLIC_URL)
-            # url = url.replace("https://minio:9000", MINIO_PUBLIC_URL.replace("http://", "https://"))
-            
             return f"{public_url}/{bucket_name}/{object_name}"
         except S3Error as e:
             print(f"Presigned URL error: {e}")
